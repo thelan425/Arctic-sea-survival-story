@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>북극해 생존기 — 상점 페이지(샘플)</title>
+  <meta name="description" content="힐링 건설 경영 시뮬레이션 게임 북극해 생존기의 비공식 상점 페이지." />
+  <style>
+    :root {
+      --bg: #0d1016;
+      --panel: #131722;
+      --panel-soft: #171b26;
+      --accent: #d1b067;
+      --text-muted: #9fa5b3;
+      --steam-blue: #66c0f4;
+      --positive: #8be18f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      background: radial-gradient(circle at top center, #242b3b 0, #0b0d12 55%, #050609 100%);
+      color: #eef2ff;
+    }
+    .page {
+      max-width: 1120px;
+      margin: 32px auto;
+      padding: 0 24px 40px;
+    }
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 30px;
+    }
+    .subtitle {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .hero-wrap {
+      margin-top: 20px;
+      position: relative;
+    }
+    .hero-wrap::before,
+    .hero-wrap::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120%;
+      max-width: 1400px;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .hero-wrap::before {
+      top: -120px;
+      height: 260px;
+      background: radial-gradient(circle at center, rgba(64,77,120,0.8) 0, transparent 60%);
+      opacity: 0.85;
+    }
+    .hero-wrap::after {
+      bottom: -180px;
+      height: 320px;
+      background: radial-gradient(circle at center, rgba(0,0,0,0.8) 0, transparent 60%);
+      opacity: 0.7;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(290px, 0.9fr);
+      gap: 22px;
+    }
+    .hero-main {
+      background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(0,0,0,0.35));
+      border-radius: 14px;
+      padding: 18px 18px 20px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.55);
+    }
+
+    /* === 여기부터 배너/이미지/그라데이션 부분 수정 === */
+    .banner {
+      position: relative;
+      height: 340px;
+      border-radius: 12px;
+      overflow: hidden;
+      background-image: url("FALL_OF_TITAN.png");
+      background-size: contain;          /* 원본 전체가 보이도록 */
+      background-position: center center;
+      background-repeat: no-repeat;
+      display: flex;
+      align-items: flex-end;
+      isolation: isolate;
+    }
+    .banner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: none;                  /* 어두운 그라데이션 완전히 제거 */
+      pointer-events: none;
+    }
+    /* === 수정 끝 === */
+
+    .banner-caption {
+      position: relative;
+      padding: 18px 20px;
+      color: #f6f7ff;
+      text-shadow: 0 6px 18px rgba(0,0,0,0.85);
+    }
+    .banner-caption-title {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .long-desc-wrap {
+      margin-top: 18px;
+      background: rgba(4,6,11,0.85);
+      border-radius: 12px;
+      padding: 14px 16px;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+    .long-desc-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .section-subheading {
+      margin: 14px 0 6px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #e5e9f7;
+    }
+    .long-desc {
+      position: relative;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.65;
+      max-height: none;
+      overflow: visible;
+    }
+    .long-desc.collapsed {
+      max-height: 260px;
+      overflow: hidden;
+    }
+    .long-desc.collapsed::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 70px;
+      background: linear-gradient(to bottom, rgba(4,5,9,0), rgba(4,5,9,0.96));
+    }
+    .long-desc p {
+      margin: 0 0 10px;
+    }
+    .feature-line {
+      color: var(--text-muted);
+      margin: 0 0 8px;
+    }
+    .feature-line strong {
+      color: #eef2ff;
+    }
+    .toggle-desc-btn {
+      margin-top: 6px;
+      background: none;
+      border: none;
+      color: #d1e2ff;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      padding: 4px 0 0;
+    }
+
+    .buy-panel {
+      background: radial-gradient(circle at top, #263349 0, #10131b 60%);
+      border-radius: 14px;
+      padding: 18px 18px 16px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    /* 스팀식 가격 + 장바구니 바 */
+    .buy-top {
+      display: flex;
+      background: #000000;
+      border-radius: 4px;
+      overflow: hidden;
+      align-items: stretch;
+    }
+    .price-block {
+      padding: 8px 12px;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+    }
+    .price {
+      font-size: 20px;
+      font-weight: 800;
+      text-align: left;
+    }
+    .price-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: left;
+    }
+    .btn-buy {
+      border: none;
+      background: #5ba32b;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      flex: 1;
+      padding: 12px 0;
+      border-radius: 6px;
+    }
+    .btn-buy:hover { filter: brightness(1.08); }
+
+    /* 메타 정보(평가/출시일/개발사 등) */
+    .meta-block {
+      margin-top: 6px;
+      padding: 8px 2px 4px;
+      font-size: 13px;
+    }
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 2px 4px;
+    }
+    .meta-label { color: var(--text-muted); }
+    .meta-value { font-weight: 600; }
+    .meta-value.positive { color: var(--positive); }
+    .meta-value.link { color: var(--steam-blue); }
+
+    .tag-row {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 12px;
+    }
+    .tag-pill {
+      background: #1a2433;
+      color: #dde7ff;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    /* 스팀 스타일 지원 사항 리스트 */
+    .support-list {
+      margin-top: 8px;
+      background: #11151e;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.04);
+      overflow: hidden;
+      font-size: 13px;
+    }
+    .support-item {
+      display: flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .support-item:last-child { border-bottom: none; }
+    .support-icon {
+      width: 18px;
+      height: 18px;
+      margin-right: 8px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #ffffffcc;
+    }
+
+    /* 컨트롤러 완벽 지원 영역 */
+    .controller-section {
+      margin-top: 10px;
+      background: var(--panel-soft);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.05);
+      font-size: 12px;
+    }
+    .controller-header {
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-weight: 600;
+    }
+    .controller-list .support-item { border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .controller-note {
+      padding: 6px 10px 8px;
+      color: var(--text-muted);
+    }
+
+    .language-panel {
+      margin-top: 10px;
+      background: #10131d;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.05);
+      font-size: 12px;
+    }
+    .language-header {
+      padding: 8px 10px;
+      background: linear-gradient(180deg, #1d2636, #151926);
+      border-radius: 10px 10px 0 0;
+    }
+    table.lang-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .lang-table th,
+    .lang-table td {
+      padding: 5px 8px;
+      text-align: left;
+    }
+    .lang-table thead { background: #151926; }
+    .lang-table th { color: var(--text-muted); font-weight: 500; }
+    .lang-table td.check { text-align: center; width: 60px; }
+    .lang-table tbody tr:nth-child(odd) { background: rgba(255,255,255,0.01); }
+    .lang-table tbody tr:nth-child(even) { background: rgba(255,255,255,0.03); }
+
+    .req-section {
+      margin-top: 30px;
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 14px 16px 18px;
+      border: 1px solid rgba(255,255,255,0.04);
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .req-title { font-size: 14px; color:#e2e6f5; font-weight:600; margin-bottom:4px; }
+    .req-columns {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .req-col-title { font-weight: 600; color: #e5e9f7; margin-bottom: 4px; }
+
+    footer {
+      margin-top: 30px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 960px) {
+      .hero { grid-template-columns: minmax(0,1fr); }
+      .buy-top { flex-direction: column; }
+      .btn-buy { width: 100%; padding: 10px 0; }
+    }
+    @media (max-width: 640px) {
+      .page { margin-top: 18px; padding: 0 14px 30px; }
+      .banner { height: 260px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>Arctic-sea-survival-story</h1>
+      <p class="subtitle">휘몰아치는 북극의 따뜻한 이야기.</p>
+    </header>
+
+    <div class="hero-wrap">
+      <div class="hero">
+        <main class="hero-main" aria-label="게임 정보">
+          <section class="banner" aria-label="게임 대표 이미지">
+            <div class="banner-caption">
+              <div class="banner-caption-title"></div>
+            </div>
+          </section>
+
+          <section class="long-desc-wrap">
+            <div class="long-desc-title">게임 설명</div>
+            <div class="long-desc collapsed" id="long-desc">
+              <p>냉동창고 같은 현실이 지겨웠다면, 따뜻한 마음을 품은 북극에 오신 것을 환영합니다.</p>
+              <p>눈을 뜬 순간 펼쳐진 새하얀 얼음, 차디찬 바람, 그리고 말하는 북극 동물들.</p>
+              <p>당신은 쇠락한 북극 마을을 다시 일으키기 위해 새로운 장사꾼이 됩니다.</p>
+              <p>카페, 공방, 레스토랑, 기념품점 등 어떤 가게를 열지는 당신의 자유!</p>
+              <p>상점을 성장시키고, 북극 친구들과 우정을 쌓고, 마을의 비밀을 풀어내세요.</p>
+
+              <h4 class="section-subheading">게임 특징</h4>
+              <p class="feature-line"><strong>■ 마을 건설 & 경영</strong><br>다양한 시설과 상점을 직접 짓고 꾸미는 북극 마을의 성장</p>
+              <p class="feature-line"><strong>■ 다양하고 색다른 만남</strong><br>개성 있는 북극 동물들과 함께 즐기는 소소한 일상 스토리</p>
+              <p class="feature-line"><strong>■ 탐험 시스템</strong><br>재료 수집, 위기 해결, 신규 동물 조우 & 신지역 개척으로 풍성한 게임 시스템</p>
+              <p class="feature-line"><strong>■ 상품 제작 & 판매</strong><br>레시피 연구, 동물 친구들의 선호도 분석, 판매-수입 전략으로 최고의 가게 만들기</p>
+              <p class="feature-line"><strong>■ 계절 이벤트</strong><br>오로라 축제, 빙하 조각 대회등 특별한 계절 콘텐츠</p>
+            </div>
+            <button class="toggle-desc-btn" id="toggle-desc" aria-expanded="false">
+              <span>더 보기</span><span>▾</span>
+            </button>
+          </section>
+        </main>
+
+        <aside class="buy-panel" aria-label="구매 및 지원 정보">
+          <div class="buy-top">
+            <div class="price-block">
+              <div class="price">₩14,900</div>
+              <div class="price-sub">북극해 생존기 · 싱글 플레이</div>
+            </div>
+            <button class="btn-buy">장바구니에 추가</button>
+          </div>
+
+          <div class="meta-block">
+            <div class="meta-row">
+              <div class="meta-label">최근 평가:</div>
+              <div class="meta-value positive">매우 긍정적</div>
+            </div>
+            <div class="meta-row">
+              <div class="meta-label">출시일:</div>
+              <div class="meta-value">2025년 12월 3일</div>
+            </div>
+            <div class="meta-row">
+              <div class="meta-label">개발자:</div>
+              <div class="meta-value link">Team Naleth</div>
+            </div>
+            <div class="meta-row">
+              <div class="meta-label">배급사:</div>
+              <div class="meta-value link">Team Naleth</div>
+            </div>
+            <div class="meta-row">
+              <div class="meta-label">장르:</div>
+              <div class="meta-value">인디, RPG, 시뮬레이션</div>
+            </div>
+
+            <div class="tag-row">
+              <span class="tag-pill">건설 경영 시뮬레이션</span>
+              <span class="tag-pill">휴식</span>
+              <span class="tag-pill">RPG</span>
+              <span class="tag-pill">인디</span>
+              <span class="tag-pill">싱글플레이</span>
+              <span class="tag-pill">크래프팅</span>
+            </div>
+          </div>
+
+          <div class="support-list" aria-label="지원하는 플레이 방식">
+            <div class="support-item">
+              <div class="support-icon">■</div>
+              <div>싱글 플레이어</div>
+            </div>
+            <div class="support-item">
+              <div class="support-icon">■</div>
+              <div>도전 과제</div>
+            </div>
+            <div class="support-item">
+              <div class="support-icon">■</div>
+              <div>games Cloud</div>
+            </div>
+            <div class="support-item">
+              <div class="support-icon">■</div>
+              <div>가족 공유</div>
+            </div>
+            <div class="support-item">
+              <div class="support-icon">■</div>
+              <div>Remote Play</div>
+            </div>
+          </div>
+
+          <div class="controller-section" aria-label="컨트롤러 완벽 지원">
+            <div class="controller-header">컨트롤러 완벽 지원</div>
+            <div class="controller-list">
+              <div class="support-item">
+                <div class="support-icon">■</div>
+                <div><span style="color:#a6d793;">Xbox 컨트롤러</span></div>
+              </div>
+              <div class="support-item">
+                <div class="support-icon">■</div>
+                <div>PlayStation 컨트롤러</div>
+              </div>
+
+          <div class="language-panel" aria-label="언어 지원">
+            <div class="language-header">언어</div>
+            <table class="lang-table">
+              <thead>
+                <tr>
+                  <th>언어</th>
+                  <th class="check">인터페이스</th>
+                  <th class="check">음성</th>
+                  <th class="check">자막</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>한국어</td>
+                  <td class="check">✔</td>
+                  <td class="check">✔</td>
+                  <td class="check">✔</td>
+                </tr>
+                <tr>
+                  <td>영어</td>
+                  <td class="check">✔</td>
+                  <td class="check">—</td>
+                  <td class="check">✔</td>
+                </tr>
+                <tr>
+                  <td>일본어</td>
+                  <td class="check">✔</td>
+                  <td class="check">—</td>
+                  <td class="check">✔</td>
+                </tr>
+                <tr>
+                  <td>독일어</td>
+                  <td class="check">✔</td>
+                  <td class="check">—</td>
+                  <td class="check">✔</td>
+                </tr>
+                <tr>
+                  <td>프랑스어</td>
+                  <td class="check">✔</td>
+                  <td class="check">—</td>
+                  <td class="check">✔</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <section class="req-section" aria-label="시스템 요구 사항">
+      <div class="req-title">시스템 요구 사항</div>
+      <div class="req-columns">
+        <div>
+          <div class="req-col-title">최소 사양</div>
+          <div>OS: Windows 7 64bit<br>프로세서: Intel Pentium 4 processor<br>메모리: 2 GB RAM<br>그래픽: 256 mb 비디오 메모리, shader model 3.0+<br>저장공간: 500 MB 여유 공간</div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div>
+        <div style="font-weight:600; color:#dde3ff;">북극해 생존기</div>
+        <div style="margin-top:4px;">개발사: Team Naleth · 퍼블리셔: Team Naleth</div>
+      </div>
+      <div>© Team Naleth. All rights reserved.</div>
+    </footer>
+  </div>
+
+  <script>
+    (function(){
+      var btn = document.getElementById('toggle-desc');
+      var desc = document.getElementById('long-desc');
+      if(!btn || !desc) return;
+      btn.addEventListener('click', function(){
+        var collapsed = desc.classList.toggle('collapsed');
+        var labelSpan = btn.querySelector('span:first-child');
+        var iconSpan = btn.querySelector('span:last-child');
+        if(labelSpan && iconSpan){
+          if(collapsed){
+            labelSpan.textContent = '더 보기';
+            iconSpan.textContent = '▾';
+            btn.setAttribute('aria-expanded','false');
+          } else {
+            labelSpan.textContent = '접기';
+            iconSpan.textContent = '▴';
+            btn.setAttribute('aria-expanded','true');
+          }
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
